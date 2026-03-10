@@ -212,7 +212,7 @@ berisiko merusak atau memengaruhi logika di kelas tingkat tinggi yang menggunaka
 kaku dan sulit karena sistem dipaksa bergantung pada implementasi asli yang mungkin membutuhkan *setup* yang rumit,
 sehingga menurunkan fleksibilitas dan skalabilitas aplikasi secara keseluruhan.
 
-## Modul 4
+## Modul 4 Reflection 1
 
 Menurut saya flownya lebih baik skeleton dan unit tests dibuat dalam satu commit saja, sehingga sebelum commit bisa
 terlihat compilation error yang sepadan dan berbagai hal terkait typo etc.
@@ -265,3 +265,43 @@ frameworks seperti spring boot yang sangat mendukung integrasi unit tesnya). Sal
 mungkin counterproductive adalah seperti proyek Computer Vision yang lebih sulit untuk dites karena karakteristik
 gambar yang tidak semudah angka atau string.
 
+## Modul 4 Reflection 2
+
+### Fast
+
+Secara keseluruhan, test yang dibuat sudah memenuhi prinsip ini dan berjalan dengan sangat cepat. Penggunaan
+framework Mockito untuk mengisolasi OrderRepository dan PaymentRepository memastikan
+bahwa test mengeksekusi logika bisnis secara langsung di memori tanpa perlu overhead dari interaksi database asli.
+
+### Independent
+
+Test yang saya tulis sudah independen. Saya memanfaatkan anotasi @BeforeEach pada method setUp() untuk selalu
+menginisialisasi ulang objek (seperti instance Order dan Payment baru) serta mengosongkan list sebelum setiap
+skenario test dijalankan. Hal ini menjamin bahwa hasil dari satu test (misalnya status yang berubah menjadi SUCCESS)
+tidak akan mencemari atau memengaruhi state dari test yang berjalan setelahnya.
+
+### Repeatable
+
+Test ini sudah repeatable. Karena environment sudah diisolasi dan tidak ada kebergantungan pada data statis
+eksternal, test ini akan selalu memberikan hasil yang sama secara konsisten. Baik saat dijalankan di lokal laptop
+saya maupun nanti saat dieksekusi di dalam pipeline CI/CD, hasilnya tidak akan berubah-ubah.
+
+### Self-Validating
+
+Prinsip ini sudah terpenuhi dengan baik. Semua test sepenuhnya mengandalkan assertions bawaan dari JUnit (seperti
+assertEquals, assertNotNull, assertThrows, dan verify untuk memeriksa interaksi mock). Tidak ada proses pengecekan
+manual (seperti membaca print out di konsol); framework secara otomatis dan tegas memberikan output LULUS
+atau GAGAL.
+
+### Timely
+
+Area ini masih kurang. Meskipun saya sudah memisahkan fase commit sesuai alur kerja TDD, secara pola pikir terkadang
+saya masih merancang detail implementasi kodenya terlebih dahulu di kepala sebelum menulis test.
+
+### Tindakan Perbaikan untuk ke Depannya
+
+Ke depannya, saya harus lebih disiplin untuk benar-benar mengimplementasikan aspek Timely. Saya harus berlatih menulis
+skenario kegagalan (unhappy path dan edge cases) secara menyeluruh di direktori src/test/java sebelum membuat kelas atau
+logika apa pun di src/main/java. Selain itu, saya ingin memastikan bahwa proses pembuatan unit test ini benar-benar saya
+manfaatkan untuk mengarahkan desain kode, bukan sekadar rutinitas untuk mencapai code
+coverage yang tinggi.
