@@ -135,8 +135,6 @@ memudahkan deploymentnya (Dalam kasus ini saya menggunakan Koyeb)
 
 ## Modul 3
 
-## Modul 3
-
 ### SRP (Single Responsibility Principle)
 
 #### Penjelasan
@@ -213,3 +211,57 @@ Komponen sistem menjadi sangat terikat satu sama lain (*tightly coupled*), sehin
 berisiko merusak atau memengaruhi logika di kelas tingkat tinggi yang menggunakannya. Pengujian kode (*testing*) menjadi
 kaku dan sulit karena sistem dipaksa bergantung pada implementasi asli yang mungkin membutuhkan *setup* yang rumit,
 sehingga menurunkan fleksibilitas dan skalabilitas aplikasi secara keseluruhan.
+
+## Modul 4
+
+Menurut saya flownya lebih baik skeleton dan unit tests dibuat dalam satu commit saja, sehingga sebelum commit bisa
+terlihat compilation error yang sepadan dan berbagai hal terkait typo etc.
+
+### Do I have enough functional tests to reassure myself that my application really works, from the point of view of the user?
+
+Terkait testing fungsionalitas sudah cukup, ini dibantu dengan melihat unit test kedua Happy test dan Unhappy test.
+Sehingga mencakup kedua kemungkinan bagaimana pengguna menggunakan aplikasi.
+
+### Am I testing all the edge cases thoroughly?
+
+Semua edge case sudah aman dilihat dari coverage report Jacoco.
+
+### Do I have tests that check whether all my components fit together properly? Could some integrated tests do this, or are functional tests enough?
+
+Jika akan dibuat Controller dan hasil frontend HTML, sebaiknya ada test untuk memastikan bahwa semua komponen yang
+dibutuhkan sudah terintegrasi dengan baik. Namun untuk sekarang tes fungsionalnya udah cukup untuk menangani
+business logic.
+
+### Are my tests giving me the confidence to refactor my code, fearlessly and frequently?
+
+Ya, pembuatan unit test yang detil dan to the point membuat saya mudah cek apakah kode sebelumnya sudah benar atau
+tidak. Ketimbang harus membuat frontend dan dites manual untuk setiap fungsionalitas backend.
+
+### Are my tests helping me to drive out a good design? If I have a lot of integration tests but less unit tests, do I need to make more unit tests to get better feedback on my code design?
+
+Ya, biasanya integration tests cenderung lebih sulit untuk dibuat karena harus menghubungkan semua komponen yang ada.
+Namun unit tes dapat membuat unit tes lebih tidak coupled sehingga refactor desain lebih mudah.
+
+### Are my feedback cycles as fast as I would like them? When do I get warned about bugs, and is there any practical way to make that happen sooner?
+
+Untuk hal fungsional tes cenderung cepat jalannya. Namun integration tes cenderung lebih lama.
+
+### Is there some way that I could write faster integration tests that would get me feedback quicker?
+
+Salah satu cara adalah menggunakan mocking untuk controller yang ada sehingga tidak perlu menghubungkan ke database.
+Dan juga integration tes sebaiknya dibuat tidak bertele-tele.
+
+### Can I run a subset of the full test suite when I need to?
+
+Ya, dengan membuat separasi task untuk fungsional tes dan integration tes pada build.gradle.kts.
+
+### Am I spending too much time waiting for tests to run, and thus less time in a productive flow state?
+
+Karena aplikasi masih relatif kecil, untuk sekarang masih aman dan tes cenderung cepat jalannya.
+
+Kesimpulannya adalah workflow TDD ini sangat cocok untuk proyek yang terstruktur dan akan dikembangkan
+serta dirawat dalam jangka panjang (sehingga cocok untuk projek web based seperti e-commerce dan apalagi menggunakan
+frameworks seperti spring boot yang sangat mendukung integrasi unit tesnya). Salah satu kasus dimana unit testing,
+mungkin counterproductive adalah seperti proyek Computer Vision yang lebih sulit untuk dites karena karakteristik
+gambar yang tidak semudah angka atau string.
+
